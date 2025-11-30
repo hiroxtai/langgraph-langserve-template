@@ -1,0 +1,63 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Check formatting
+        run: |
+          echo "::group::Ruff Format Check"
+          uv run ruff format --check . || (echo "::error::Code formatting check failed. Run 'uv run ruff format .' locally to fix." && exit 1)
+          echo "::endgroup::"
+
+      - name: Lint code
+        run: |
+          echo "::group::Ruff Lint"
+          uv run ruff check . || (echo "::error::Linting failed. Run 'uv run ruff check --fix .' locally to fix." && exit 1)
+          echo "::endgroup::"
+
+      - name: Type check
+        run: |
+          echo "::group::Pyright Type Check"
+          uv run pyright || (echo "::error::Type checking failed. Fix type errors locally." && exit 1)
+          echo "::endgroup::"
+
+      - name: PR Comment with Results
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const outcome = '${{ job.status }}';
+            const body = outcome === 'success'
+              ? '✅ All code quality checks passed!'
+              : '❌ Some code quality checks failed. Please review the logs above.';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

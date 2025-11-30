@@ -1,0 +1,22 @@
+{
+  // このワークスペースで推奨される拡張機能
+  "recommendations": [
+    // Python開発
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+
+    // リント・フォーマット
+    "charliermarsh.ruff",
+
+    // その他の便利な拡張機能
+    "ms-python.debugpy",
+    "tamasfe.even-better-toml"
+  ],
+
+  // このワークスペースで推奨されない拡張機能
+  "unwantedRecommendations": [
+    "ms-python.flake8",
+    "ms-python.pylint",
+    "ms-python.black-formatter"
+  ]
+}
