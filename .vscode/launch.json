@@ -5,12 +5,25 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: メインプログラム",
+      "name": "FastAPI: サーバー起動",
       "type": "debugpy",
       "request": "launch",
-      "program": "${workspaceFolder}/main.py",
+      "module": "uvicorn",
+      "args": ["server:app", "--reload", "--host", "0.0.0.0", "--port", "8000"],
       "console": "integratedTerminal",
       "justMyCode": true,
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    },
+    {
+      "name": "FastAPI: サーバー起動（外部ライブラリ含む）",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["server:app", "--reload", "--host", "0.0.0.0", "--port", "8000"],
+      "console": "integratedTerminal",
+      "justMyCode": false,
       "env": {
         "PYTHONUNBUFFERED": "1"
       }
@@ -27,35 +40,12 @@
       }
     },
     {
-      "name": "Python: デモ（ストリーミング）",
+      "name": "Python: server.py 直接実行",
       "type": "debugpy",
       "request": "launch",
-      "program": "${workspaceFolder}/main.py",
+      "program": "${workspaceFolder}/server.py",
       "console": "integratedTerminal",
       "justMyCode": true,
-      "env": {
-        "PYTHONUNBUFFERED": "1"
-      },
-      "args": []
-    },
-    {
-      "name": "Python: モジュールとして実行",
-      "type": "debugpy",
-      "request": "launch",
-      "module": "main",
-      "console": "integratedTerminal",
-      "justMyCode": true,
-      "env": {
-        "PYTHONUNBUFFERED": "1"
-      }
-    },
-    {
-      "name": "Python: デバッグ（外部ライブラリ含む）",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/main.py",
-      "console": "integratedTerminal",
-      "justMyCode": false,
       "env": {
         "PYTHONUNBUFFERED": "1"
       }
